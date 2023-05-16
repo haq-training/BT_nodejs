@@ -11,5 +11,9 @@
     "training"
   ],
   "author": "no one",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "jsdom": "^22.0.0",
+    "mysql": "^2.18.1"
+  }
 }

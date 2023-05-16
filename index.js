@@ -2,13 +2,13 @@ const http = require('http');
 const util = require('util');
 const url  = require('url');
 const os   = require('os');
+const datajson2 = require('./read-file.js');
+const database = require('./connect-to-mysql.js');
 const server = http.createServer();
-
 server.on('request', async function (req, res) {
   const reqUrl = url.parse(req.url, true);
-  res.writeHead(200, {'Content-Type': "text/html; charset=utf-8"});
+  res.writeHead(200, {'Content-Type': "text/html; charset=utf-8; application/json"});
   let content = "";
-
   if (reqUrl.pathname === '/') {
     content += "<html>";
     content += "<head>";
@@ -38,28 +38,68 @@ server.on('request', async function (req, res) {
   } else if (reqUrl.pathname === '/reading-file') {
     content += "<html>";
     content += "<head>";
-    content += "<title>Đọc file</title>";
+    content += "<title>Đọc file JSON</title>";
     content += "</head>";
     content += "<body>";
-    content += "<h1>Đọc file</h1>";
-    content += "<p>" + " " + 'Nội dung file hiển thị ở đây' + " " + "</p>";
+    content += "<h1>Đọc file JSON</h1>";
+    content += "<pre><code>" + JSON.stringify(datajson2, null, 2) + "</code></pre>";
     content += "</body>";
     content += "</html>";
   } else if (reqUrl.pathname === '/connect-mysql-db') {
     content += "<html>";
     content += "<head>";
     content += "<title>Kết nối đến MySQL</title>";
+    content +="<style>";
+    content +="table, th, td {";
+    content +="border: 1px solid black;";
+    content += "}";
+    content +="</style>";
     content += "</head>";
     content += "<body>";
-    content += "<h1>Kết nối đến MySQL</h1>";
-    content += "<p>" + " " + 'Kết quả kết nối đến DB hiển thị ở đây' + " " + "</p>";
+    content += "<h1>Kết nối đến MYSQL </h1>";
+    content +="<table style = 'width:100% '>";
+    content += "<tr>";
+    content +="<th>employeeNumber</th>";
+    content +="<th>lastName</th>";
+    content +="<th>firstName</th>";
+    content +="<th>extension</th>";
+    content +="<th>email</th>";
+    content +="<th>officeCode</th>";
+    content +="<th>reportsTo</th>";
+    content +="<th>jobTitle</th>";
+    content +="</tr>";
+    content +="<tr>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].employeeNumber) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].lastName) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].firstName) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].extension) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].email) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].officeCode) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].reportsTo) + "</code></pre>";
+    content +="</td>";
+    content +="<td> ";
+    content +="<pre><code>" + JSON.stringify(database.database[0].jobTitle) + "</code></pre>";
+    content +="</td>";
+    content +="</tr>";
+    content +="</table>  ";
+    content +="<pre><code>" + JSON.stringify(database.database,null,2) + "</code></pre>";
     content += "</body>";
     content += "</html>";
-  }
-
+  } 
   res.end(content);
-
 });
-
-server.listen(8080);
-console.log('Listening to http://127.0.0.1:8080');
+server.listen(8000);
+console.log('Listening to http://127.0.0.1:8000');
