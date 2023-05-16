@@ -68,34 +68,38 @@ server.on('request', async function (req, res) {
     content +="<th>reportsTo</th>";
     content +="<th>jobTitle</th>";
     content +="</tr>";
-    content +="<tr>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].employeeNumber) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].lastName) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].firstName) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].extension) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].email) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].officeCode) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].reportsTo) + "</code></pre>";
-    content +="</td>";
-    content +="<td> ";
-    content +="<pre><code>" + JSON.stringify(database.database[0].jobTitle) + "</code></pre>";
-    content +="</td>";
-    content +="</tr>";
+
+    database.database.forEach(element => {
+
+      content +="<tr>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.employeeNumber) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.lastName) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.firstName) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.extension) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.email) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.officeCode) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.reportsTo) + "</code></pre>";
+      content +="</td>";
+      content +="<td> ";
+      content +="<pre><code>" + JSON.stringify(element.jobTitle) + "</code></pre>";
+      content +="</td>";
+      content +="</tr>";
+      
+       });
     content +="</table>  ";
-    content +="<pre><code>" + JSON.stringify(database.database,null,2) + "</code></pre>";
     content += "</body>";
     content += "</html>";
   } 
