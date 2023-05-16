@@ -2,11 +2,16 @@ const http = require('http');
 const util = require('util');
 const url  = require('url');
 const os   = require('os');
+const fs   = require('fs');
+const jsonObject = require('./read-file.js');
+
+const { getEmployees } = require('./connect-to-mysql');
+const { JSDOM } = require('jsdom');
 const server = http.createServer();
 
 server.on('request', async function (req, res) {
   const reqUrl = url.parse(req.url, true);
-  res.writeHead(200, {'Content-Type': "text/html; charset=utf-8"});
+  res.writeHead(200, {'Content-Type': "text/html; charset=utf-8; application/json"});
   let content = "";
 
   if (reqUrl.pathname === '/') {
@@ -35,17 +40,29 @@ server.on('request', async function (req, res) {
     content += "</table>";
     content += "</body>";
     content += "</html>";
-  } else if (reqUrl.pathname === '/reading-file') {
+  }else if (reqUrl.pathname === '/reading-file') {
+    const dom = new JSDOM(content);
+    const document = dom.window.document;
+    const jsonObjectDiv = document.createElement('div');
+    jsonObjectDiv.textContent = JSON.stringify(jsonObject, null, 2);
+    document.body.appendChild(jsonObjectDiv);
     content += "<html>";
     content += "<head>";
-    content += "<title>Đọc file</title>";
+    content += "<title>Đọc file JSON</title>";
     content += "</head>";
     content += "<body>";
-    content += "<h1>Đọc file</h1>";
-    content += "<p>" + " " + 'Nội dung file hiển thị ở đây' + " " + "</p>";
+    content += "<h1>Đọc file JSON</h1>";
+    content += "<pre><code>" + JSON.stringify(jsonObject, null, 2) + "</code></pre>";
     content += "</body>";
     content += "</html>";
-  } else if (reqUrl.pathname === '/connect-mysql-db') {
+  }  
+   else if (reqUrl.pathname === '/connect-mysql-db') {
+    const dom = new JSDOM(content);
+    const res = await getEmployees();
+    const document = dom.window.document;
+    const jsonObjectDiv = document.createElement('div');
+    jsonObjectDiv.textContent = JSON.stringify(res, null, 2);
+    document.body.appendChild(jsonObjectDiv);
     content += "<html>";
     content += "<head>";
     content += "<title>Kết nối đến MySQL</title>";
@@ -53,6 +70,7 @@ server.on('request', async function (req, res) {
     content += "<body>";
     content += "<h1>Kết nối đến MySQL</h1>";
     content += "<p>" + " " + 'Kết quả kết nối đến DB hiển thị ở đây' + " " + "</p>";
+    content += "<pre><code>" + JSON.stringify(res, null, 2) + "</code></pre>";
     content += "</body>";
     content += "</html>";
   }
